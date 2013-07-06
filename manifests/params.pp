@@ -37,6 +37,6 @@ class postgres::params {
   $default_tablespace = 'pg_default'
 
   ## Service Parameters
-  $service = 'postgres'
+  $service = 'postgresql'
 }
 
