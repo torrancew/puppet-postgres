@@ -23,7 +23,9 @@
 # Copyright 2013, Tray Torrance
 # unless otherwise noted.
 #
-class postgres::configure {
+class postgres::configure(
+  $user = $postgres::params::user,
+) inherits postgres::params {
   Class['postgres::install'] -> Class['postgres::configure']
 }
 
