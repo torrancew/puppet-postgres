@@ -1,6 +1,6 @@
 # == Define: postgres::database
 #
-# A class storing default parameters for the postgres module
+# A defined type for creating PostgreSQL databases
 #
 # === Parameters:
 #
@@ -24,6 +24,7 @@
 # unless otherwise noted.
 #
 define postgres::database(
+  $ensure     = present,
   $owner      = $postgres::params::default_user,
   $encoding   = $postgres::params::default_encoding,
   $template   = $postgres::params::default_template,
@@ -31,11 +32,22 @@ define postgres::database(
 ) {
   Class['postgres::service'] -> Postgres::Database[$title]
 
-  exec {
-    "create postgres database $title":
-      command => "createdb -D $tablespace -E $encoding -O $owner -T $template $title",
-      unless  => "psql -c 'SELECT datname FROM pg_database' | grep -qE '^$title$'",
-      user    => $postgres::configure::user;
+  $test_db = "psql -c 'SELECT datname FROM pg_database' | grep -qe '^${title}$'"
+
+  if $ensure == 'present' {
+    exec {
+      "create postgres database $title":
+        command => "createdb -D $tablespace -E $encoding -O $owner -T $template $title",
+        unless  => $test_db,
+        user    => $postgres::configure::user;
+    }
+  } else {
+    exec {
+      "drop postgres database $title":
+        command => "dropdb $title",
+        onlyif  => $test_db,
+        user    => $postgres::configure::user;
+    }
   }
 }
 
