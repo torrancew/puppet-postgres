@@ -33,7 +33,7 @@ define postgres::role(
   if $ensure == 'present' {
     exec {
       "create postgres role $title":
-        command => "createuser $title",
+        command => "createuser -dSlR $title",
         unless  => $test_user,
         user    => $postgres::configure::user;
     }
