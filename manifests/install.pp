@@ -29,8 +29,8 @@ class postgres::install(
 ) inherits postgres::params {
   package {
     'postgres':
-      name    => $package,
-      version => $version;
+      name   => $package,
+      ensure => $version;
   }
 }
 
