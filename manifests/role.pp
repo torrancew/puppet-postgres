@@ -28,7 +28,7 @@ define postgres::role(
 ) {
   Class['postgres::service'] -> Postgres::Role[$title]
 
-  $test_user = "psql -c 'SELECT rolname FROM pg_roles' | grep -qE '^$title$'"
+  $test_user = "psql -Atc 'SELECT rolname FROM pg_roles' | grep -qE '^$title$'"
 
   if $ensure == 'present' {
     exec {

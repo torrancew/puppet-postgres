@@ -32,7 +32,7 @@ define postgres::database(
 ) {
   Class['postgres::service'] -> Postgres::Database[$title]
 
-  $test_db = "psql -c 'SELECT datname FROM pg_database' | grep -qe '^${title}$'"
+  $test_db = "psql -Atc 'SELECT datname FROM pg_database' | grep -qe '^${title}$'"
 
   if $ensure == 'present' {
     exec {
