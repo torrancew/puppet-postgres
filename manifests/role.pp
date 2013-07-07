@@ -35,7 +35,7 @@ define postgres::role(
       "create postgres role $title":
         command => "createuser -dSlR $title",
         unless  => $test_user,
-        user    => $postgres::configure::user;
+        user    => getvar( 'postgres::configure::user' );
     }
   }
   else {
@@ -43,7 +43,7 @@ define postgres::role(
       "drop postgres role $title":
         command => "createuser $title",
         onlyif  => $test_user,
-        user    => $postgres::configure::user;
+        user    => getvar( 'postgres::configure::user );
     }
   }
 }
