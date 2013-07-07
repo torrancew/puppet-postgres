@@ -30,6 +30,7 @@ define postgres::database(
   $template   = $postgres::params::default_template,
   $tablespace = $postgres::params::default_tablespace,
 ) {
+  include postgres::configure
   Class['postgres::service'] -> Postgres::Database[$title]
 
   $test_db = "psql -Atc 'SELECT datname FROM pg_database' | grep -qe '^${title}$'"
