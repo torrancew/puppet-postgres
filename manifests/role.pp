@@ -26,8 +26,7 @@
 define postgres::role(
   $ensure = 'present',
 ) {
-  Class['postgres::configure'] -> Postgres::Role[$title]
-  Class['postgres::service']   -> Postgres::Role[$title]
+  Class['postgres::service'] -> Postgres::Role[$title]
 
   $test_user = "psql -Atc 'SELECT rolname FROM pg_roles' | grep -qE '^$title$'"
 
@@ -36,7 +35,7 @@ define postgres::role(
       "create postgres role $title":
         command => "createuser -dSlR $title",
         unless  => $test_user,
-        user    => getvar( 'postgres::configure::user' );
+        user    => $postgres::configure::user;
     }
   }
   else {
@@ -44,7 +43,7 @@ define postgres::role(
       "drop postgres role $title":
         command => "createuser $title",
         onlyif  => $test_user,
-        user    => getvar( 'postgres::configure::user' );
+        user    => $postgres::configure::user;
     }
   }
 }
