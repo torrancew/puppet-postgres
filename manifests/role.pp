@@ -43,7 +43,7 @@ define postgres::role(
       "drop postgres role $title":
         command => "createuser $title",
         onlyif  => $test_user,
-        user    => getvar( 'postgres::configure::user );
+        user    => getvar( 'postgres::configure::user' );
     }
   }
 }
